@@ -41,6 +41,7 @@
 
     }
 </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <!-- Site wrapper -->
@@ -271,6 +272,8 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+</body>
 
 <!-- jQuery -->
 <script src="{{asset('public/backend')}}/plugins/jquery/jquery.min.js"></script>

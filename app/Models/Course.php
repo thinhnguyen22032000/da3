@@ -50,7 +50,7 @@ class Course extends Model
               return false;
             }
         }
-        return $data = DB::table('course')->get();
+        return $data = DB::table('course')->where('status', 1)->get();
 
     }
 
@@ -148,6 +148,7 @@ class Course extends Model
         $data = DB::table('mycourse')->select('mycourse.id_course')
                                      ->join('course', 'mycourse.id_course', '=', 'course.id_course')
                                      ->where('mycourse.id', $id)
+
                                      ->get();
         if($data) return $data;
         
@@ -169,12 +170,29 @@ class Course extends Model
     public function showCourseByCat($id_cat) {
         if($id_cat) {
 
-            return DB::table('course')->where('id_cat', $id_cat)->get();
+            return DB::table('course')->where('id_cat', $id_cat)->where('status', 1)->get();
         }
     }
     // func search by key
     public function searchCoursesByKey($key) {
         return DB::table('course')->where('name', 'LIKE', '%'.$key.'%')->get();
+    }
+
+    public function handlePublicCourse($req) {
+        if($req->action === 'public') {
+           foreach($req->courseIds as $id_course) {
+                DB::table('course')->where('id_course', $id_course)->update([
+                 'status' => 1,
+                ]);  
+           }
+        }else {
+            foreach($req->courseIds as $id_course) {
+                DB::table('course')->where('id_course', $id_course)->update([
+                 'status' => 0,
+                ]);  
+           } 
+        }
+        
     }
     
 }

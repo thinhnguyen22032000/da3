@@ -44,6 +44,7 @@ class HomeController extends Controller
         
         
         $result = $this->course->showCourseById();
+        //return response()->json($result);
         //------------------
         if($id == null) {
            return view('admin.student.list_courseL3', compact(['result', 'categoryNames', 'myIdCourses']));

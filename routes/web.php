@@ -35,6 +35,7 @@ Route::group(['prefix' => 'admin'], function(){
      Route::resource(
         'course', 'CourseController'
      )->middleware('teacherrole');
+     Route::post('course/handle_form', 'CourseController@handlePublicCourse');
 
      //course for student
      Route::get('course_detail/{id}', 'CourseController@courseDetail');
@@ -70,6 +71,9 @@ Route::group(['prefix' => 'admin'], function(){
 
      //api - calender
      Route::get('api/v1/calender', 'CalenderController@api_calender');
+     // api test
+     Route::get('api/data/{id?}', 'APIController@index');
+
 
 
 

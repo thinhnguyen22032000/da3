@@ -15,9 +15,8 @@
        display: inline-block;
     }
 </style>
-
 <div class="outer" style="width:80%;">
-   <div id="calendar">
+   <div wire:loading.delay id="calendar">Loading...
    </div>
 </div>
    

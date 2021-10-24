@@ -163,6 +163,13 @@ class CourseController extends Controller
 
     }
 
+    public function handlePublicCourse(Request $request) {
+        $this->course->handlePublicCourse($request);
+        //return response()->json($request);
+        return redirect()->back();
+
+    }
+
 
     public function getLessonOfCourse($id_course) {
           $lessonPlay = $this->lesson->getLessonByIdCourse($id_course);

@@ -1,3 +1,4 @@
+<div wire:loading.delay >
 <div class="row">
     @foreach($result as $item)
     @if(!in_array($item->id_course, $myIdCourses ))
@@ -35,4 +36,5 @@
     </div>
     @endif
     @endforeach
+</div>
 </div>

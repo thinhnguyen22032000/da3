@@ -101,9 +101,12 @@
             <ol class="lesson-list">
                  <?php $i=0  ?>
                  @foreach($lessons as $lesson)
-                 <button class="lesson-item__link <?php echo $lesson->status!=0?'lock-none':''?>"
-                    <?php echo $lesson->status===0?'titile="plase waiting"':''?> 
-                    <?php echo $lesson->status===0?'disabled="disabled"':''?> 
+                 <button class="lesson-item__link
+                    <?php echo $lesson->status!=0?'lock-none':''?>"
+                    <?php 
+                    echo $lesson->status===0?'titile="plase waiting" disabled="disabled"':''
+                    ?> 
+    
                     data="{{$lesson->id_lesson}}">
                     <?php echo $lesson->status===0?'<i class="fas fa-lock icon_lock"></i>':''?>
                     {{$lesson->title}}
