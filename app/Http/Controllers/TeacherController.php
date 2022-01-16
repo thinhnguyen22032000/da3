@@ -24,11 +24,20 @@ class TeacherController extends Controller
     {
         $user = new User();
         $level_teacher = 1;
+        
+        
+        if(isset($_GET['q'])) {
+            $name = $_GET['q'];
+            $result = User::where('level', $level_teacher)->where('name', 'LIKE', '%'.$name.'%')->get();
+            $numRow = count($result);
+            return view('admin.teacher.index', compact(['result', 'numRow']));
+        }
         $result = $user->showUser($level_teacher);
-        return view('admin.teacher.index', compact('result'));
+        $numRow = count($result);
+        return view('admin.teacher.index', compact(['result', 'numRow']));
     }
     public function toastr(){
-        Toastr::success('User added successfully!!!','Success');
+        Toastr::success('Successfully!!!','Success');
     }
 
     /**
@@ -62,10 +71,10 @@ class TeacherController extends Controller
             $level = 'teacher';
             $result = $user->addUser($request,  $level);
             if($result){
-                Toastr::success('User added successfully!!!','Success');
+                Toastr::success('Successfully!!!','Success');
                 return redirect('admin/teacher');
             }else{
-                Toastr::error('Add user failed!!!','Error');
+                Toastr::error('Failed!!!','Error');
                 return redirect('admin/teacher/create'); 
             }
 
@@ -117,10 +126,10 @@ class TeacherController extends Controller
         $user = new User();
         $result = $user->updateUser($request, $id);
         if($result){
-            Toastr::success('User added successfully!!!','Success'); 
+            Toastr::success('Successfully!!!','Success'); 
             return redirect('admin/teacher');
         }else{
-             Toastr::error('User added successfully!!!','Success');
+             Toastr::error('Failed!!!','Error');
              return redirect('admin/teacher');
         }
     }

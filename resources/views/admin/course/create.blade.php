@@ -1,12 +1,14 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
-
-@section('path', 'dashboard > course > create')
-
+@section('title', 'Home')
+@section('name', '')
+@section('path', 'Add Course')
+@section('test', '')
 @section('admin_content')
 
 
+<p><i class="fas fa-bars"></i> Add course</p>
+<a href="{{url('/admin/course')}}" class="btn btn-primary btn-icon mb-2"><i class="fas fa-redo"></i></a>
 <form id="" action="{{url('admin/course')}}" method="post" enctype='multipart/form-data'>
 @csrf
     
@@ -16,8 +18,8 @@
           <div class="form-group row">
             <label  class="col-sm-3 col-form-label">Course category</label>
             <div class="col-sm-6">
-               <select name='id_cat' class="form-select" aria-label="Default select example">
-                  <option selected>Choose category name</option>
+               <select name='id_cat' class="form-select form-control" aria-label="Default select example">
+                  <option value="">Choose category name</option>
                   @foreach($categoryData as $item)
                   <option value="{{$item->id_cat}}">{{$item->name}}</option>
                   @endforeach
@@ -86,7 +88,7 @@
            <div class="form-group row">
                 <label for="" class="col-sm-3 col-form-label">Step</label>
                 <div class="col-sm-9">
-                  <input type="number" class="form-control" name="step">
+                  <input type="number" min="1"  class="form-control" name="step">
                   @error('step')
                     <p class="text-danger mb-0"> {{ $message }} </p>
                   @enderror
@@ -100,7 +102,7 @@
     
      <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Save</button>
     </div>
   </div>
 </form>

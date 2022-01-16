@@ -82,7 +82,8 @@ class User extends Authenticatable
             $imgCurrent = $imgCurrent[0]->img;
             $linkImg = 'public/backend/uploads/img/'.$imgCurrent;
 
-            unlink($linkImg);
+            if(file_exists($linkImg))
+               unlink($linkImg);
 
             DB::table('users')->where('id',$id)
                              ->update($data);
@@ -183,6 +184,7 @@ class User extends Authenticatable
               'email' =>$req->email,
               'password' =>bcrypt($req->password),
               'address' => "",
+              'gender' =>$req->gender,
               'phone' =>$req->phone,
               'img' =>'avatar.png',
               'level' => 2,

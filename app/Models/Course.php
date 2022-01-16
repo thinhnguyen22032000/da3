@@ -38,11 +38,21 @@ class Course extends Model
            return false;
         }
     }
+    
+    public function showCourseByIdEdit($id) {
+        return $data = DB::table('course')->where('id_course', $id)->get();
 
+    }
     public function showCourseById($id = null) {
         
          if($id) {
-            $data = DB::table('course')->where('id_course', $id)->get();
+            $data = DB::table('course')
+                          ->select('course.*', 'users.name as authName', DB::raw('count(lesson.id_course) as countLesson'))
+                          ->join('lesson', 'course.id_course', '=', 'lesson.id_course')
+                          ->join('users', 'users.id', '=', 'course.id')
+                          ->where('course.id_course', $id)
+                          ->groupBy('lesson.id_course')
+                          ->get();
 
             if($data){
                return $data;
@@ -72,9 +82,9 @@ class Course extends Model
             $imgCurrent = $imgCurrent[0]->img;
             $linkImg = 'public/backend/uploads/img/'.$imgCurrent;
 
-            if(file_exists($linkImg)) {
-              unlink($linkImg);  
-            }
+            if(file_exists($linkImg))
+               unlink($linkImg);  
+            
 
             $data['img'] = $img_name;
 
@@ -135,16 +145,46 @@ class Course extends Model
     }
 
     public function showMyCourse($id) {
-        $data = DB::table('mycourse')->select('course.*', 'mycourse.code_confirm')
+        $data = DB::table('mycourse')->select('course.*', 'mycourse.code_confirm',
+                                              DB::raw('count(lesson.id_course) as countLesson'),
+                                          )
                                      ->join('course', 'mycourse.id_course', '=', 'course.id_course')
+                                     ->join('lesson', 'lesson.id_course', '=', 'course.id_course')
                                      ->where('mycourse.id', $id)
+                                     ->groupBy('lesson.id_course')
                                      ->get();
         if($data) return $data;
         
         return false;
     }
+    
+    public function countLabSubmited($id) {
+         // $data = DB::table('mycourse')->select(DB::raw('count(lesson.id_lesson) as countLabSubmited'))
+         //                             ->join('course', 'mycourse.id_course', '=', 'course.id_course')
+         //                             ->join('lesson', 'lesson.id_course', '=', 'lesson.id_course')
+         //                             ->join('lab', 'lab.id_lesson', '=', 'lesson.id_lesson')
+         //                             ->where('mycourse.id', $id)
+         //                             ->groupBy('course.id_course')
+         //                             ->get();
 
-     public function showIdMyCourse($id) {
+         $data = DB::table('mycourse')->select('mycourse.id_course',
+                                               DB::raw('count(lesson.id_course) as countLesson'),
+                                              DB::raw('count(lab.id_lesson) as countLabSubmited')
+                                          )
+                                     ->join('course', 'mycourse.id_course', '=', 'course.id_course')
+                                     ->join('lesson', 'lesson.id_course', '=', 'course.id_course')
+                                     ->leftJoin('lab', 'lab.id_lesson', '=', 'lesson.id_lesson')
+                                     ->where('mycourse.id', $id)
+                                     ->where('lab.id', $id)
+                                     ->groupBy('lesson.id_course')
+                                     ->get();
+        if($data) return $data;
+        
+        return false;
+
+    }
+
+    public function showIdMyCourse($id) {
         $data = DB::table('mycourse')->select('mycourse.id_course')
                                      ->join('course', 'mycourse.id_course', '=', 'course.id_course')
                                      ->where('mycourse.id', $id)
@@ -169,15 +209,23 @@ class Course extends Model
 
     public function showCourseByCat($id_cat) {
         if($id_cat) {
-
             return DB::table('course')->where('id_cat', $id_cat)->where('status', 1)->get();
         }
     }
+
     // func search by key
-    public function searchCoursesByKey($key) {
+    public function searchCoursesByKey($id_teacher, $key, $actor) {
+        if($actor == 'admin') {
+            return DB::table('course')
+            ->select('course.*', 'category.name as categoryName')
+            ->join('category', 'course.id_cat', '=', 'category.id_cat')
+            ->where('course.id', $id_teacher)
+            ->where('course.name', 'LIKE', '%'.$key.'%')->get();
+        }
         return DB::table('course')->where('name', 'LIKE', '%'.$key.'%')->get();
     }
-
+    
+    //update state courses
     public function handlePublicCourse($req) {
         if($req->action === 'public') {
            foreach($req->courseIds as $id_course) {
@@ -193,6 +241,10 @@ class Course extends Model
            } 
         }
         
+    }
+
+    public function getCourseToggle($id) {
+        return DB::table('course')->where('course.id', $id)->get();
     }
     
 }

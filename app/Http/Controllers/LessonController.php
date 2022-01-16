@@ -17,20 +17,22 @@ class LessonController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $lesson;
+    private $course;
 
     public function __construct() {
          $this->lesson = new lesson();
+         $this->course = new Course();
     }
 
     public function index($id)
     {
 
 
-         $result = $this->lesson->showLesson($id);
-         $nameCourse = $this->lesson->showNameOfLesson($id);
-         //return response()->json($result);
-         $position = 'Dashboard > '.$nameCourse[0]->name.' > lesson';
-         return view('admin.lesson.index', compact(['result', 'id', 'position']));
+        $result = $this->lesson->showLesson($id);
+        $nameCourse = $this->lesson->showNameOfLesson($id);
+        //return response()->json($result);
+        $position = ' List Lessons: '.$nameCourse[0]->name;
+        return view('admin.lesson.index', compact(['result', 'id', 'position']));
     }
 
     /**
@@ -40,10 +42,10 @@ class LessonController extends Controller
      */
     public function create($id)
     {
-         $nameCourse = $this->lesson->showNameOfLesson($id);
-         //return response()->json($result);
-         $position = 'Dashboard > '.$nameCourse[0]->name.' > lesson - create';
-        return view('admin.lesson.create', compact(['id', 'position']));
+        $nameCourse = $this->lesson->showNameOfLesson($id);
+        //return response()->json($result);
+        $position = ' List Lessons: '.$nameCourse[0]->name.'';
+       return view('admin.lesson.create', compact(['id', 'position']));
     }
 
     /**
@@ -91,7 +93,9 @@ class LessonController extends Controller
     {
         
         $result = $this->lesson->getLessonById($id_lesson);
-        return view('admin.lesson.edit', compact(['result', 'id', 'id_lesson']));
+        $nameCourse = $this->lesson->showNameOfLesson($id);
+        $position = ' List Lessons: '.$nameCourse[0]->name.'';
+        return view('admin.lesson.edit', compact(['result', 'id', 'id_lesson','position']));
     }
 
     /**
@@ -103,14 +107,20 @@ class LessonController extends Controller
      */
     public function update(Request $request,$id, $id_lesson)
     {
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required',
+            
+         ]);
+
        $result = $this->lesson->updateLesson($request, $id_lesson);
 
         if($result) {
-            Toastr::success('update lesson successfully!!!','Success');
+            Toastr::success('Update lesson successfully!!!','Success');
 
             return redirect('admin/course/'.$id.'/lesson');
         } else {
-            Toastr::Error('update lesson failure!!!','Error');
+            Toastr::Error('Update lesson failure!!!','Error');
             return redirect('admin/course/'.$id.'/lesson');
         }   
     }
@@ -118,7 +128,13 @@ class LessonController extends Controller
 
     // process question
     public function getAddFromQuestion($id, $id_lesson) {
-        return view('admin.lesson.create_question', compact(['id', 'id_lesson']));
+        $listQuestions = $this->lesson->showQuestions($id_lesson);
+        $nameLesson = $this->lesson->getLessonById($id_lesson);
+        $nameCourse = $this->course->showCourseById($id);
+        $position = ' List Lessons: '.$nameCourse[0]->name;
+        $path = '> '. $nameLesson[0]->title;
+        
+        return view('admin.lesson.create_question', compact(['path','id', 'id_lesson','listQuestions','position']));
     }
 
     public function questionCreate(Request $request, $id, $id_lesson) {
@@ -140,7 +156,7 @@ class LessonController extends Controller
         }
 
         // add question into question table
-
+        
         $result = $this->lesson->addQuestion($id_lesson, $data);
         if($result) {
 
@@ -153,15 +169,19 @@ class LessonController extends Controller
 
     }
 
+    // update question
+    public function questionUpdate(Request $request) {
+        $this->lesson->questionUpdate($request->question,$request->questionId);
+        return redirect()->back()->with("notify","Update question successfully!");
+    }
+
     // submit lab for lesson
 
     public function uploadLab(Request $request) {
         
-          $request->validate([
-          'lab_file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-          ]);
-
           if ($request->file('lab_file')) {
+
+            // $file = $request->file->store('public/backend/uploads/labs');
              
             $id_student = Auth::user()->id;
             $id_lesson = $request->id_lesson;
@@ -171,6 +191,18 @@ class LessonController extends Controller
         }
   
         return 2;
+
+
+    }
+
+    public function updateStatus($id_lesson, $status) {
+
+        Lesson::where('id_lesson', $id_lesson)->update([
+           'status' => $status  
+        ]);
+
+        Toastr::success('Updated status success','Success');
+        return redirect()->back();
 
 
     }

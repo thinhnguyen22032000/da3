@@ -12,7 +12,7 @@ class CalenderController extends Controller
 {
     public function index() {
 
-         return view('admin.student.calender');
+         return view('site.calender');
     }
     
     public function api_calender() {

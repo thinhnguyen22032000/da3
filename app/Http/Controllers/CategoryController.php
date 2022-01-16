@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Course;
+
 use Auth;
 use Toastr;
 class CategoryController extends Controller
@@ -56,10 +58,10 @@ class CategoryController extends Controller
         $result = $category->addCategory($request, $id_teacher);
 
         if($result){
-           Toastr::success('User added successfully!!!','Success');
+           Toastr::success('Successfully!!!','Success');
            return redirect('admin/category');
         }else{
-           Toastr::error('User added successfully!!!','Success');
+           Toastr::error('Failed!!!','Error');
            return redirect('admin/category/create');  
         }
 
@@ -106,7 +108,7 @@ class CategoryController extends Controller
         $category = new Category();
         $result = $category->updateCategory($request, $id);
         if($result){
-            Toastr::success('User added successfully!!!','Success'); 
+            Toastr::success('Successfully!!!','Success'); 
             return redirect('admin/category');
         }else{
              Toastr::error('Category name already exists','Error');
@@ -114,11 +116,10 @@ class CategoryController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    //show all category for student
+    public function getCourseByCat($id_cat) {
+        $catName = Category::where('id_cat', $id_cat)->first();
+        $courses = Course::where('id_cat', $id_cat)->where('id', Auth::user()->id)->get();
+        return view('admin.category.course_of_cat', compact(['courses', 'catName']));
+
+    }
 }

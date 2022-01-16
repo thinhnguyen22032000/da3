@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\User;
 use Auth;
 
 
@@ -32,13 +33,16 @@ class HomeController extends Controller
         $categoryNames = $this->category->showCategoryById();
        
         // -----------------------------
+        $path = '<i class="fas fa-home"></i>';
         
         // if isset q
         
         if(isset($_GET['q'])) {
             $key = $_GET['q'];
-            $result = $this->course->searchCoursesByKey($key);
-            return view('admin.student.list_courseL3', compact(['result', 'categoryNames', 'myIdCourses']));     
+            $actor = 'student';
+
+            $result = $this->course->searchCoursesByKey($id_student=null,$key,$actor);
+            return view('site.list_courseL3', compact(['path','result', 'categoryNames', 'myIdCourses']));     
            
         }
         
@@ -47,7 +51,7 @@ class HomeController extends Controller
         //return response()->json($result);
         //------------------
         if($id == null) {
-           return view('admin.student.list_courseL3', compact(['result', 'categoryNames', 'myIdCourses']));
+           return view('site.list_courseL3', compact(['path','result', 'categoryNames', 'myIdCourses']));
         }
         elseif($id == 1) {
             $length = count($result);
@@ -57,7 +61,7 @@ class HomeController extends Controller
               } 
             
            }
-           return view('admin.student.list_courseL3', compact(['result', 'categoryNames', 'myIdCourses']));
+           return view('site.list_courseL3', compact(['path','result', 'categoryNames', 'myIdCourses']));
         }
         else {
             $length = count($result);
@@ -66,7 +70,7 @@ class HomeController extends Controller
                   unset($result[$i]);
               }    
            }
-           return view('admin.student.list_courseL3', compact(['result', 'categoryNames', 'myIdCourses']));
+           return view('site.list_courseL3', compact(['path','result', 'categoryNames', 'myIdCourses']));
         } 
      }
 
@@ -82,11 +86,17 @@ class HomeController extends Controller
             }
             $result = $this->course->showCourseByCat($id);
             $categoryNames = $this->category->showCategoryById();
-            return view('admin.student.course_for_category', compact(['result', 'categoryNames','myIdCourses']));
+            return view('site.course_for_category', compact(['result', 'categoryNames','myIdCourses']));
         }
        
         dd("ko ton tai id");
         
+     }
+
+     public function getProfile() {
+        $userProfile = User::where('id', Auth::user()->id)->get();
+        $userProfile = $userProfile[0];
+        return view('profile.user', compact('userProfile'));
      }
 
      

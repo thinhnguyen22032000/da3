@@ -42,8 +42,9 @@ class Lesson extends Model
             $videoCurrent = DB::table('lesson')->where('id_lesson', $id)->get();
             $videoCurrent = $videoCurrent[0]->video;
             $linkVideo = 'public/backend/uploads/video/'.$videoCurrent;
-
-            unlink($linkVideo);
+            
+            if(file_exists($linkVideo))
+                unlink($linkVideo);
 
             $video = $req->file('video');
             $video_name = time().'.'.$video->getClientOriginalExtension();
@@ -219,7 +220,15 @@ class Lesson extends Model
     }
 
     
+   //show question 
+   public function showQuestions($id_lesson) {
+    return DB::table('question')->where('id_lesson', $id_lesson)->get();
+   }
 
+   // update question
+   public function questionUpdate($question, $questionId) {
+    DB::table('question')->where('id_question', $questionId)->update(['content' => $question]);
+   }
 
 
 

@@ -16,10 +16,21 @@ class TeacherRole
      */
     public function handle(Request $request, Closure $next)
     {
-         if(Auth::check() && Auth::user()->level === 1){
-            return $next($request);
-        }else{
-            return redirect('admin');
+        if(Auth::check()){
+           $level = Auth::user()->level;
+           switch ($level) {
+               case 1:
+                  return $next($request);
+               case 0:
+                  return redirect('admin/dashboard');
+               default:
+                  return redirect('home');
+           }
+              
         }
+        else {
+            return redirect('/');
+        }
+        
     }
 }

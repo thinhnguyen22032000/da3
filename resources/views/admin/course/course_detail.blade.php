@@ -1,7 +1,7 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
-
+@section('title', 'Home')
+@section('code', 'home')
 @section('path', ($position))
 
 @section('admin_content')
@@ -17,34 +17,47 @@
     }
     .m-text {
         margin-bottom: 0px;
+        margin: 10px;
     }
     .detail-course__icon {
         min-width: 30px;
+    }
+    .list-group-item__content {
+        transition: 0.3s all ease;
+    }
+    .list-group-item__link:hover .list-group-item__content {
+      padding-left: 20px;
     }
 </style>
 
 <div class="row">
     
-    <div class="col-9">
+    <div class="col-lg-9 col-sm-12">
         @foreach($result as $item)
             <input type="hidden" name="id_course" value="{{$item->id_course}}">
             <h1 class="detail-course__title">{{ $item->name }}</h1>
-            <img style="width: 350px" src="{{asset('public/backend/uploads/img')}}/{{$item->img}}" alt="img">
-            <p class="m-text mt-2"><i class="fas fa-book-open detail-course__icon"></i>lesson num: 20</p>
-            <p class="m-text"><i class="fas fa-users detail-course__icon"></i>member: 89</p>
-            <p class="m-text"><i class="fas fa-money-check-alt detail-course__icon"></i>price: {{$item->price}}$</p>
-            <a href="" id="show_confirm" class="btn btn-primary mt-2">Buy now</a>
+            <img style="width: 100%" src="{{asset('public/backend/uploads/img')}}/{{$item->img}}" alt="img">
+            <br>
+            <p class="m-text mt-4"><i class="fas fa-book-open detail-course__icon"></i>Current lessons: {{$item->countLesson}}</p>
+            <p class="m-text"><i class="fas fa-users detail-course__icon"></i>Member: {{$item->member}}</p>
+            <p class="m-text"><i class="fas fa-money-check-alt detail-course__icon"></i>Price: {{$item->price}}$</p>
+            <p class="m-text"><i class="fas fa-user-tie detail-course__icon"></i>Author: {{$item->authName}}</p>
+            <p class="m-text"><i class="far fa-calendar-alt"></i> Date Start: {{$item->date_start}}</p>
+            <a href="" id="show_confirm" class="btn btn-primary mt-2"><i class="fas fa-dollar-sign"></i> Buy now</a>
+            <br>
             <hr>
-            <p class="text-left text-desc">Với CSS, bạn có thể kiểm soát màu sắc, phông chữ, kích thước của văn bản, khoảng cách giữa các phần tử, cách các phần tử được định vị và bố trí, hình ảnh nền hoặc màu nền sẽ được sử dụng, các màn hình khác nhau cho các thiết bị và kích thước màn hình khác nhau, và nhiều hơn nữa!</p>
+            <h2>Description:</h2>
+            <p class="text-left text-desc">{{$item->desc}}</p>
         @endforeach
     </div>
 
-    <div class="col-3">
-        <h3>nomination category</h3>
-        <ul class="list-group">
+    <div class="col-lg-3">
+        <h2>Categories</h2>
+        <ul class="list-group list-group-flush">
             @foreach($categoryNames as $category)
            <li class="list-group-item">
-               <a href="{{url('admin/home/category/'.$category->id_cat)}}">{{$category->name}}</a>
+               <a class="list-group-item__link" href="{{url('category/'.$category->id_cat)}}">
+                 <i class="fas fa-arrow-right text-dark" style="margin-right: 8px"></i> <span class="list-group-item__content">{{$category->name}}</span></a>
            </li>
             @endforeach
         </ul>
@@ -70,8 +83,7 @@
               swal({
               title: `Click ok to see the tutorial`,
               icon: "success",
-              buttons: true,
-              dangerMode: true,
+              
             })
              .then(confirm => {
                  window.location.href = 'http://localhost:88/da3/admin/buy_course_success/'+id_course;

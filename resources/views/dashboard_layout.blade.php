@@ -20,11 +20,13 @@
   <link rel="stylesheet" href="{{asset('public/backend')}}/plugins/summernote/summernote-bs4.min.css">
   <!-- font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
+  <!-- my css -->
+  <link rel="stylesheet" href="{{asset('public/backend')}}/dist/css/mycss.css">
+  
   @yield('link')
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;700&display=swap" rel="stylesheet">
-<style>
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;700&display=swap" rel="stylesheet">
+ <style>
 
     body {
          font-family: "Montserrat",Arial,Helvetica,sans-serif;
@@ -34,13 +36,18 @@
        position: relative;
     }
     .point-online::after {
-      content: " - Remember this";
-      background-color: yellow;
-      color: red;
-      font-weight: bold;
+        content: "";
+        background-color: rgba(0, 189, 31, 0.85);
+        width: 12px;
+        height: 12px;
+        font-weight: bold;
+        position: absolute;
+        top: 27px;
+        left: 38px;
+        border-radius: 50%;
 
     }
-</style>
+ </style>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -59,27 +66,27 @@
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
       <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+        <!-- <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
-        </a>
+        </a> -->
         <div class="navbar-search-block">
           <form class="form-inline">
             <div class="input-group input-group-sm">
               <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
+                <!-- <button class="btn btn-navbar" type="submit">
                   <i class="fas fa-search"></i>
                 </button>
                 <button class="btn btn-navbar" type="button" data-widget="navbar-search">
                   <i class="fas fa-times"></i>
-                </button>
+                </button> -->
               </div>
             </div>
           </form>
         </div>
       </li>
       <li>
-        <a href="{{url('admin/logout')}}" onclick="return confirm('Are you sure want logout?')">
+        <a href="{{url('/logout')}}" onclick="return confirm('Are you sure want logout?')">Logout
             <i class="fas fa-sign-out-alt" style="padding: 8px 16px; cursor: pointer;"></i>
         </a>
       </li>
@@ -90,10 +97,22 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{asset('admin/dashboard')}}" class="brand-link">
-      <img src="{{asset('public/backend')}}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Manager</span>
-    </a>
+    <?php 
+        if(Auth::user()->level == 2) { ?>
+            <a href="{{asset('/home')}}" class="brand-link">
+              <img src="{{asset('public/backend')}}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+              <span class="brand-text font-weight-light">E-learning</span>
+            </a>
+    <?php
+        }else{ ?>
+        <a href="{{asset('admin/dashboard')}}" class="brand-link">
+          <img src="{{asset('public/backend')}}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+          <span class="brand-text font-weight-light">Manager</span>
+        </a>
+    <?php
+        }
+    ?>
+    
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -129,19 +148,21 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-              <a href="#" class="nav-link">
+          <?php 
+            if(Auth::user()->level == 0) { ?>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
                    <i class="nav-icon fas fa-user"></i>
                       <p>
                       Teacher Manager
                     <i class="right fas fa-angle-left"></i>
                      </p>
-              </a>
-              <ul class="nav nav-treeview">
+                </a>
+                <ul class="nav nav-treeview">
                       <li class="nav-item">
                         <a href="{{url('admin/teacher/create')}}" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>Add teacher</p>
+                           <i class="far fa-circle nav-icon"></i>
+                           <p>Add teacher</p>
                         </a>
                       </li>
                       <li class="nav-item">
@@ -150,18 +171,40 @@
                           <p>List teacher</p>
                         </a>
                       </li>
-             </ul>
-          </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                   <i class="nav-icon fas fa-cog"></i>
+                      <p>
+                      System
+                    <i class="right fas fa-angle-left"></i>
+                     </p>
+                </a>
+                <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="{{url('admin/slider')}}" class="nav-link">
+                           <i class="far fa-circle nav-icon"></i>
+                           <p>Sider</p>
+                        </a>
+                      </li>
+                </ul>
+            </li>
+          <?php
+             }
+          ?>
 
-         <!-- -----------------course----------------------------------- -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-book"></i>
-                <p>
-                Course Manager
-                <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
+          <!-- level == 1 -->
+           <?php 
+              if(Auth::user()->level == 1) { ?>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-book"></i>
+                    <p>
+                    Course Manager
+                    <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{url('admin/course/create')}}" class="nav-link">
@@ -203,22 +246,52 @@
             </ul>
            </li>
 
-           <li class="nav-item">
-                <a href="{{url('admin/home')}}" class="nav-link">
-                    <i class="nav-icon fas fa-home"></i>
-                    <p>home</p>
+            <li class="nav-item">
+                <a href="{{url('admin/lab')}}" class="nav-link">
+                    <i class="nav-icon fas fa-file"></i>
+                    <p>
+                    Submited List
+                    </p>
                 </a>
             </li>
-             <li class="nav-item">
-                <a href="{{url('admin/home/me/calender')}}" class="nav-link">
+               
+            <?php
+              }
+           ?>
+
+          
+           <!-- level == 2 -->
+           <?php 
+            if(Auth::user()->level == 2) { ?>
+            <li class="nav-item">
+                <a href="{{url('home')}}" class="nav-link">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>Home</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{url('home/me/calender')}}" class="nav-link">
                     <i class="nav-icon far fa-calendar-alt"></i>
                     <p>Calender</p>
                 </a>
             </li>
+            
 
-           <!-- ------------------show category for studen ------------ -->
+           <!-- ------------------mycourse ------------ -->
 
            @include('sub_layout.list_course')
+
+
+
+            <?php
+              }
+           ?>
+           <li class="nav-item">
+                <a href="{{url('profile')}}" class="nav-link">
+                    <i class="nav-icon far fa-address-card"></i>
+                    <p>Profile</p>
+                </a>
+            </li>
 
         </ul>
       </nav>
@@ -233,7 +306,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
            <div class="col-sm-6">
-            <h1>@yield('path')</h1>
+           <a href="http://localhost:88/da3/@yield('code')/">@yield('title')</a><span> ></span>
+             <a href="http://localhost:88/da3/@yield('name')/">@yield('test')</a>
+             <a href="http://localhost:88/da3/@yield('lcv')/">@yield('lcvtest')</a>@yield('path')
           </div> 
         </div>
       </div><!-- /.container-fluid -->
@@ -258,12 +333,7 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.1.0
-    </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
+  
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -291,12 +361,18 @@
 <script>
   $(function () {
     // Summernote
-    $('#summernote').summernote();
+    $('#summernote').summernote(
+        {
+          height: 150
+        }
+    );
   })
 </script>
 <!-- end editer -->
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 {!! Toastr::message() !!}
 @yield('script')
+<!-- lazy load -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js" integrity="sha512-jNDtFf7qgU0eH/+Z42FG4fw3w7DM/9zbgNPe3wfJlCylVDTT3IgKW5r92Vy9IHa6U50vyMz5gRByIu4YIXFtaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>

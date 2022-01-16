@@ -1,5 +1,5 @@
     .card_costom {
-        max-height: 300px;
+        max-height: 200px;
         position: relative;
     }
     
@@ -95,7 +95,7 @@
     }
 
     .card-fit-img:hover img {
-        transform: scale(1.5);
+        transform: scale(1.2);
         overflow: hidden;
     }
     .btn-learn {
@@ -110,27 +110,63 @@
     }
 
     /*loading spiner*/
-    .lds-dual-ring {
-      display: inline-block;
-      width: 80px;
-      height: 80px;
+   .loader {
+      border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+      margin-left: 45%;
+       margin-top: 15%;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
     }
-    .lds-dual-ring:after {
-      content: " ";
-      display: block;
-      width: 64px;
-      height: 64px;
-      margin: 8px;
-      border-radius: 50%;
-      border: 6px solid #fff;
-      border-color: #fff transparent #fff transparent;
-      animation: lds-dual-ring 1.2s linear infinite;
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
     }
-    @keyframes lds-dual-ring {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+
+
+    /*notify alert */
+
+    .alert-notify {
+        background-color: antiquewhite;
+        color: #da55cc;
+        padding: 6px;
+    }
+
+    /*alert success*/
+    .alert-notify__success {
+        background-color: #82f091;
+        color: #146211;
+        padding: 6px;
+    }
+
+    /*alert error*/
+    .alert-notify__warning {
+        background-color: #82f091;
+        color: #146211;
+        padding: 6px;
+    }
+    .alert-notify__icon {
+        margin-right: 8px;
+    }
+    .alert-notify__link {
+        color: blue !important;
+    }
+
+    .btn-icon {
+    width: fit-content;
+    align-self: flex-end;
+    }
+    .btn-status {
+        cursor: unset;
     }

@@ -1,11 +1,12 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
-
-@section('path', 'dashboard > category > edit')
-
+@section('title', 'Home')
+@section('path', '> Edit Category')
+@section('name', 'admin/category')
+@section('test', 'List Categories')
 @section('admin_content')
-
+<p class="font-weight-bold"><i class="fas fa-bars"></i> Edit category</p>
+<a href="{{url('/admin/category')}}" class="btn btn-primary btn-icon mb-2"><i class="fas fa-redo"></i></a>
 @foreach($result as $item)
 <form action="{{url('admin/category')}}/{{$item->id_cat}}" method="post" enctype='multipart/form-data'>
 @csrf
@@ -34,7 +35,7 @@
   
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Save</button>
     </div>
   </div>
   

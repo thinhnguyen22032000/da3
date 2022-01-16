@@ -1,10 +1,23 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
-
-@section('path', 'dashboard > course > list')
-
+@section('title', 'Home')
+@section('path', 'List Course')
+@section('name', '')
+@section('test', '')
 @section('admin_content')
+<?php 
+     if(isset($_GET['q'])){
+        echo '<h4>Search key: '.$_GET['q'].'</h4>';
+     }
+?>
+<p><i class="fas fa-bars"></i> List courses</p>
+
+<form action="{{url('admin/course')}}" id="form-search"  method="GET" style="margin-left: 70%;">
+            @csrf
+           <input type="text" class="" placeholder="Enter course name..." name="q">
+           <button id="btnSearch" class="btn btn-success mb-1"><i class="fas fa-search"></i></button>
+           <button class="btn btn-primary mb-1"><a href="{{url('admin/course')}}"><i style="color: white;" class="fas fa-share"></i></a></button>
+</form>
 
 <form action="{{url('admin/course/handle_form')}}" id="form-submit-checked" method="POST">
 @csrf
@@ -20,9 +33,12 @@
           <option value="public">public</option>
           <option value="private">private</option>
         </select>
-        <button class="btn btn-primary ml-3" id="publicAllCourses" disabled="disabled">Execute</button>
+        <button class="btn btn-primary ml-3 p-1" id="publicAllCourses" disabled="disabled">Execute</button>
+
 </div>
+
 <br>
+<h5>Total: {{ $numRow }} row</h5>
 <table class="table table-hover">
     <thead>
       <tr>
@@ -36,10 +52,11 @@
         <th>Date start</th>
         <th>Step</th>
         <th>Status</th>
-        <th >action</th>
+        <th >Action</th>
       </tr>
     </thead>
     <tbody>
+    @if(!$result->isEmpty())
     @foreach($result as $item)
       <tr>
         <td>
@@ -65,22 +82,28 @@
             @endif
         </td>
         <td >
-            <a href="{{url('admin/course/'.$item->id_course.'/edit')}}">
-                <i class="fas fa-edit text-success"></i>
+            <a href="{{url('admin/course/'.$item->id_course.'/edit')}}" style="margin-right: 8px;">
+                <p class="btn btn-warning p-1"><i class="fas fa-edit text-white"></i></p>
             </a>
             <a href="{{url('admin/course/'.$item->id_course.'/lesson')}}">
-               <span class="badge badge-primary">view</span>
+               <p class="btn btn-primary p-1"><i class="far fa-eye"></i></p>
             </a>
         </td>
       </tr>
-    @endforeach  
+    @endforeach 
+    @else
+    <div class="alert alert-notify" role="alert">
+        <i class="fas fa-exclamation-circle alert-notify__icon"></i>
+         Course not found
+     </div>
+    @endif
     </tbody>
 </table>
 
 <hr>
 
 <div>
-    {{ $result->links() }} 
+   
 </div>
 </form>
 
@@ -90,7 +113,9 @@
         const checkboxALl = $('#checkbox-all')
         const courseItemCheckbox = $('input[name="courseIds[]"]')
         const publicAllCourses = $('#publicAllCourses')
-        const selectActions = $('#select-acrions');
+        const selectActions = $('#select-acrions')
+        const btnSearch = $('#btnSearch')
+
 
         checkboxALl.change(function() {
             const isCheckALl =  $(this).prop('checked')
@@ -122,6 +147,11 @@
                 publicAllCourses.prop('disabled', true)
             }
         }
+        // search course
+
+        btnSearch.click(function() {
+            console.log($('#form-search'))
+        })
 
 
     })

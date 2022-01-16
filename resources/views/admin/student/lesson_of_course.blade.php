@@ -1,9 +1,10 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'home')
-
-@section('path', ('Home > my course > '.$courseCurrent[0]->name ))
-
+@section('title', 'Home')
+@section('code', 'home')
+@section('name', 'my_course')
+@section('path', ('>'.$courseCurrent[0]->name))
+@section('test','My Course')
 @section('admin_content')
 
 <style>
@@ -51,6 +52,18 @@
  .wrap-homework__desc {
     font-weight: 700;
  }
+ .load_submit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 3000;
+
+
+
+ }
 
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -67,7 +80,7 @@
 
                 <hr>
                 <div class="wrap-homework">
-                    <p class="wrap-homework__desc">HomeWork: Submit assignments as .doc or .txt . files</p>
+                    <p class="wrap-homework__desc">HomeWork: Submit assignments as .pdf files</p>
                     <ol>
                         @foreach($questions as $item)
                         <li>{{$item->content}}</li>
@@ -80,13 +93,13 @@
                     @csrf
                         <input type="hidden" id="id_lesson" value="{{ $lessonPlay->id_lesson }}">
                         <input type="file" id="lab_file" name="lab_file">
-                        <button type="submit" class="submit_lab">send</button>
+                        <button type="submit" class="submit_lab btn btn-primary">send</button>
                     </form>
                     <p id="txt_submit" ></p>
                     @else
                     
                     <div class="alert alert-success" role="alert">
-                      This is a success alert—check it out!
+                      Submitted the assignment
                     </div>
                     @endif
                     @endif
@@ -116,6 +129,9 @@
         </div> 
     </div>
 </div>
+<div class="modal_load">
+    <div class="load_submit-spiner"></div>
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -141,6 +157,7 @@ $(document).ready(function() {
 </script>
 
 <script>
+        const loader = document.querySelector('.video_render')
         const lessons = document.querySelectorAll('.lesson-item__link');
         for(const lesson of lessons){
             lesson.onclick = function(e){
@@ -164,13 +181,19 @@ $(document).ready(function() {
                         _token: _csrf
                     },
                     success:function(data) {
-                        $('.video_render').html(data);
+                        $('.video_render').html("");
+                        loader.classList.add('loader')
+                        setTimeout(()=> {
+                           loader.classList.remove('loader')
+                           $('.video_render').html(data);
+                        }, 1000)
                     }
                 })
             }
         }     
 </script>
 <script>
+
     
 </script>
 

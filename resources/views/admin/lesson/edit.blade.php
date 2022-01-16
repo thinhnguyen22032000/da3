@@ -1,13 +1,15 @@
 @extends('dashboard_layout')
 
-@section('title', 'dasboard')
-
-@section('path', 'dashboard > course > lesson > edit')
-
+@section('title', 'Home')
+@section('path', ' > Edit Lesson')
+@section('name', 'admin/course')
+@section('test', 'List Course')
+@section('lcv', 'admin/course/'.$id.'/lesson')
+@section('lcvtest', ('>'.$position))
 @section('admin_content')
-
+<p><i class="fas fa-bars"></i> Edit lesson</p>
 @include('sub_layout.sub_nav_lesson')
-<hr>
+
 @foreach($result as $item) 
 <form id="" action="{{url('admin/course/'.$id.'/lesson/'.$id_lesson)}}" method="post" enctype='multipart/form-data'>
 @csrf
@@ -63,7 +65,7 @@
     
      <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Save</button>
     </div>
   </div>
 </form>

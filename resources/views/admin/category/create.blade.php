@@ -1,11 +1,12 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
+@section('title', 'Home')
 
-@section('path', 'dashboard > category > create')
+@section('path', 'Add Category')
 
 @section('admin_content')
-
+<p><i class="fas fa-bars"></i> Add category</p>
+<a href="{{url('/admin/category')}}" class="btn btn-primary btn-icon mb-2"><i class="fas fa-redo"></i></a>
 <form id="form_create_category" action="{{url('admin/category')}}" method="post">
 @csrf
  
@@ -33,7 +34,7 @@
   
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Save</button>
     </div>
   </div>
   

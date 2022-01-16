@@ -16,11 +16,20 @@ class AdminRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->level === 0 || Auth::user()->level === 1){
-            return $next($request);
-        }else{
-            return redirect('admin');
+        if(Auth::check()){
+           $level = Auth::user()->level;
+           switch ($level) {
+               case 0:
+                  return $next($request);
+               case 1:
+                  return redirect('admin/welcome');
+               default:
+                  return redirect('home');
+           }
+              
         }
-        
+        else {
+         return redirect('/');
+     }
     }
 }

@@ -1,10 +1,15 @@
-@extends('dashboard_layout');
+@extends('dashboard_layout')
 
-@section('title', 'dasboard')
+@section('title', 'Home')
 
-@section('path', 'dashboard > teacher > create')
+@section('path', ' Add Teacher')
 
 @section('admin_content')
+
+<p><i class="fas fa-bars"></i> Add Teacher</p>
+
+<a href="{{url('/admin/teacher')}}" class="btn btn-primary btn-icon mb-2"><i class="fas fa-redo"></i></a>
+
 
 @if(session('message'))
      <div class="alert alert-primary mt-1 p-1" role="alert">{{ session('message') }}</div>
@@ -34,9 +39,9 @@
   </div>
 
   <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">phone</label>
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Phone</label>
     <div class="col-sm-4">
-      <input type="text" name="phone" class="form-control" placeholder="phone">
+      <input type="number" name="phone" class="form-control" placeholder="phone">
        @error('phone')
        <p class="text-danger mb-0"> {{ $message }} </p>
        @enderror
@@ -46,7 +51,7 @@
   <div class="form-group row">
     <label for="inputPassword3" class="col-sm-2 col-form-label">Gender</label>
     <div class="col-sm-4">
-      <select name="gender" class="form-select h-100" aria-label="Default select example">
+      <select name="gender" class="form-control">
               <option selected value="0">---Gender---</option>
               <option value="0">Male</option>
               <option value="1">Female</option>         
@@ -65,7 +70,7 @@
   </div>
 
   <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Image</label>
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Avatar</label>
     <div class="col-sm-4">
       <input type="file" name="img">
     </div>
@@ -96,7 +101,7 @@
   
   <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Save</button>
     </div>
   </div>
   </div>

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Auth;
 
 class StudentRole
 {
@@ -16,10 +17,20 @@ class StudentRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->level === 2){
-            return $next($request);
-        }else{
-            return redirect('admin');
+        if(Auth::check()){
+           $level = Auth::user()->level;
+           switch ($level) {
+               case 2:
+                  return $next($request);
+               case 0:
+                  return redirect('admin/dashboard');
+               default:
+                  return redirect('admin/welcome');
+           }
+              
         }
+        else {
+         return redirect('/');
+     }
     }
 }
